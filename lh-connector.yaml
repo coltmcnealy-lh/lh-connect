@@ -1,0 +1,14 @@
+apiVersion: littlehorse.io/v1
+kind: LHTaskConnector
+metadata:
+  namespace: littlehorse
+  name: hello-world-connector
+spec:
+  lhClusterRef:
+    name: my-cluster
+  taskConfig:
+    tenant: default
+    taskDefName: greet-from-connector
+  build:
+    context:
+      git: https://github.com/coltmcnealy-lh/

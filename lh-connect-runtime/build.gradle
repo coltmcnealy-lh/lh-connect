@@ -1,0 +1,53 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'com.diffplug.spotless' version '6.20.0'
+}
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+dependencies {
+    // Logging
+    implementation project(":lh-connect")
+    implementation 'org.slf4j:slf4j-api:2.0.7'
+    implementation 'org.apache.logging.log4j:log4j-slf4j2-impl:2.20.0'
+
+    // JSON Processing
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.15.2'
+    implementation 'com.jayway.jsonpath:json-path:2.9.0'
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
+
+    compileOnly "org.projectlombok:lombok:1.18.+"
+    annotationProcessor "org.projectlombok:lombok:1.18.+"
+
+    // Just so that we can run it properly.
+    implementation project(":example-kafka-source")
+    implementation project(":example-say-hello")
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+application {
+    // mainClass = 'io.littlehorse.connectruntime.LHTaskConnectorRuntime'
+    mainClass = 'io.littlehorse.connectruntime.LHSourceConnectorRuntime'
+    executableDir = 'lh-connect-runtime'
+}
+
+compileJava {
+    options.compilerArgs << '-parameters'
+}
+
+spotless {
+    java {
+        target('**/*.java')
+        palantirJavaFormat()
+    }
+}
